@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Model\Reply;
+use App\Model\Question;
+use App\Http\Resources\ReplyResource;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
@@ -12,74 +14,33 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Question $question)
     {
-        //
+        return ReplyResource::collection($question->replies);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    
+    public function store(Question $question, Request $request)
     {
-        //
+        $question->replies()->create($request->all());
+        return response(['reply' => new ReplyResource($reply)], 201);
+        // return response('Created', 201);
+    } 
+
+    public function show(Question $question, Reply $reply)
+    { 
+        return new ReplyResource($reply);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    
+    public function update(Question $question, Request $request, Reply $reply)
     {
-        //
+        $reply->update($request->all());
+        return response('Updated', 202);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Reply $reply)
+    
+    public function destroy(Question $question, Reply $reply)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Reply $reply)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reply $reply)
-    {
-        //
+        $reply->delete();
+        return response(null, 204);
     }
 }
