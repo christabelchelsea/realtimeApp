@@ -12,14 +12,17 @@ window.Vue = require('vue');
 
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-
 Vue.use(Vuetify);
+
+import VueSimplemde from 'vue-simplemde'
+import 'simplemde/dist/simplemde.min.css'
+Vue.component('vue-simplemde', VueSimplemde)
 
 //auth
 import User from './Helpers/User'
 window.User = User
 
-console.log(User.hasToken())
+window.EventBus = new Vue();
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -32,6 +35,7 @@ console.log(User.hasToken())
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('AppHome', require('./components/AppHome.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

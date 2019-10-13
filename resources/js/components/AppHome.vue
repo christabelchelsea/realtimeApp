@@ -1,17 +1,17 @@
 <template>
   <div>
-    <beranda></beranda>
+    <navbar></navbar>
     <router-view></router-view>
-    <app-footer></app-footer>
+    <!-- <app-footer></app-footer> -->
   </div>
 </template>
      
 <script>
-import beranda from "./Beranda";
-import AppFooter from "./AppFooter";
+import navbar from "./Navbar";
+// import AppFooter from "./AppFooter";
 import login from "./login/Login";
 
 export default {
-  components: { beranda, AppFooter, login }
+  components: { navbar, login }
 };
 </script>

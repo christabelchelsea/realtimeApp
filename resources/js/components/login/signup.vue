@@ -3,52 +3,76 @@
     <div class="login-form">
       <div class="main-div">
         <div class="panel">
-          <h2>Admin Login</h2>
-          <p>Please enter your email and password</p>
+          <h2>SIGN UP</h2>
         </div>
 
-        <v-form @submit.prevent="login" id="Login">
+        <v-form @submit.prevent="signup" id="Login">
+          <div class="form-group">
+            <input
+              type="text"
+              v-model="form.name"
+              class="form-control is-invalid"
+              placeholder="Nama"
+              required
+            />
+            <div v-if="errors.name" class="invalid-feedback">{{errors.name[0]}}</div>
+          </div>
           <div class="form-group">
             <input
               v-model="form.email"
               type="email"
-              class="form-control"
+              class="form-control is-invalid"
               placeholder="Email Address"
               required
             />
+            <div v-if="errors.email" class="invalid-feedback">{{errors.email[0]}}</div>
           </div>
 
           <div class="form-group">
             <input
               v-model="form.password"
               type="password"
-              class="form-control"
+              class="form-control is-invalid"
               placeholder="Password"
+              required
+            />
+            <div v-if="errors.password" class="invalid-feedback">{{errors.password[0]}}</div>
+          </div>
+          <div class="form-group">
+            <input
+              v-model="form.password_confirmation"
+              type="password"
+              class="form-control is-invalid"
+              placeholder="Password confirmation"
               required
             />
           </div>
 
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
 
           <div class="forgot">
-            <router-link to="/signup">
-              <div class="forgot">Sign Up</div>
+            <router-link to="/login">
+              <div class="forgot">Login</div>
             </router-link>
           </div>
         </v-form>
       </div>
     </div>
   </div>
-</template>
+</template> 
+
 
 <script>
 export default {
   data() {
     return {
       form: {
+        name: null,
         email: null,
-        password: null
-      }
+        password: null,
+        password_confirmation: null
+      },
+      errors: {}
     };
   },
   created() {
@@ -57,15 +81,25 @@ export default {
     }
   },
   methods: {
-    login() {
-      User.login(this.form);
-      this.$router.push({ name: "forum_name" });
+    signup() {
+      axios
+        .post("/api/auth/signup", this.form)
+        .then(res => {
+          User.responAfterLogin(res);
+          // this.$router.push({ name: "forum_name" });
+        })
+        .catch(error => (this.errors = error.response.data.errors));
+      // .catch(error => (this.errors = error.response.data.error));
     }
   }
 };
 </script>
 
+
 <style scoped>
+.invalid-feedback {
+  text-align: left;
+}
 .form-heading {
   color: #fff;
   font-size: 23px;

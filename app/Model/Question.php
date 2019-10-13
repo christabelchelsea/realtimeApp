@@ -7,6 +7,15 @@ use App\User;
 
 class Question extends Model
 {
+    //create slug
+    protected static function boot(){
+        parent::boot();
+
+        static::creating(function($question) {
+            $question->slug = str_slug($question->title);
+        }); 
+    }
+
     // custom parameter http://127.0.0.1:8000/api/question/{{id}}
     public function getRouteKeyName()
     {
@@ -19,7 +28,8 @@ class Question extends Model
 
     public function getPathAttribute()
     {
-        return asset("api/question/$this->slug");
+        return "/question/$this->slug";
+        // return asset("api/question/$this->slug");
     }
 
     public function user()
